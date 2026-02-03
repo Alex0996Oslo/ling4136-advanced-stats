@@ -46,7 +46,7 @@ We will be working with Quantese again, see `01_exercise.qmd` and the other data
 ```{r}
 #| label: load-quantese
 
-quantese <- read_csv("../../data/quantese_naming_sim.csv") 
+quantese <- read_csv("../data/quantese_naming_sim.csv") 
 
 # add log-transformed reaction time
 quantese <- quantese |> 
@@ -97,7 +97,17 @@ Estimating variance components for linear mixed effects models is mathematically
 
 ```
 
-### (D) write up results
+### (D) Optional: Consistency of effect 
+If you have not done `01_exercises`, plot how consistent the effect is across different participants. If you have done the prior exercise, remind yourself on it here and take it into consideration when reporting your (sub-optimal) model.
+
+```{r}
+#| label: consistency_quantese
+
+# YOUR CODE HERE
+
+```
+
+### (E) write up results
 
 Write up your analysis and results accordingly.
 
@@ -109,4 +119,3 @@ Write up your analysis and results accordingly.
 
 ::: {#refs}
 :::
-

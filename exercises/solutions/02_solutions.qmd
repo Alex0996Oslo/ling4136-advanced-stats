@@ -223,7 +223,6 @@ xmdl_r_slopes_red1 <- lmer(pitch ~ context + gender +
 
 xmdl_r_slopes_red2 <- lmer(pitch ~ context  + gender + 
                              (1 | subject) +
-                             # instead of a random slope we use only a random intercept
                              (1 + context | sentence),
                            data = polite)
 # Now the model converges.
@@ -246,7 +245,7 @@ summary(xmdl_r_slopes_red2) # standard error of context coefficient is 5.7
 
 ```
 
-What we can see is that the coefficient itself remains very similar, but the uncertainty around this estimate changes: adding random intercept generally helps the model identifying the effect of context because it allows to account for variance associated with different participants and items; adding random slopes on the other hand introduces more uncertainty because sentences differ in how context affects pitch. This is concerning because the model with a random slope for subjects did not converge.
+What we can see is that the coefficient itself remains very similar, but the uncertainty around this estimate changes: adding random intercepts generally helps the model identifying the effect of context because it allows to account for variance associated with different participants and items; adding random slopes on the other hand introduces more uncertainty because sentences differ in how context affects pitch. This is concerning because the model with a random slope for subjects did not converge.
 
 Make a graph that visualize how the difference between formal and informal context affects pitch across subjects and sentences.
 
@@ -262,7 +261,6 @@ polite_subj <- polite |>
 polite_items <- polite |> 
   group_by(sentence, context) |> 
   summarise(mean_pitch = mean(pitch, na.rm = TRUE))
-
 
 # plot subjects
 polite_subj |> 
@@ -302,9 +300,8 @@ We use the maximal model that converges and would like to generate a p-value for
 #| label: likelihood-ratio-tests
 
 # full model with REML = FALSE
-xmdl_r_slopes_red2_null <- lmer(pitch ~ gender + 
+xmdl_r_slopes_red2 <- lmer(pitch ~ context + gender + 
                              (1 | subject) +
-                             # instead of a random slope we use only a random intercept
                              (1 + context | sentence),
                              REML = FALSE,
                            data = polite)
@@ -312,7 +309,6 @@ xmdl_r_slopes_red2_null <- lmer(pitch ~ gender +
 # corresponding null model
 xmdl_r_slopes_red2_null <- lmer(pitch ~ gender + 
                              (1 | subject) +
-                             # instead of a random slope we use only a random intercept
                              (1 + context | sentence),
                              REML = FALSE,
                            data = polite)
@@ -328,7 +324,7 @@ When writing up the results, you want to indicate several indices: the Chi squar
 
 Writing the whole thing up could look something like this:
 
-All data were analyzed with linear mixed models, using R [@R_program] and the package lme4 [@bates2015package] assuming a Gaussian error distribution. The model predicted pitch in Hz by context (formal vs. informal) and self-reported gender of participants (male vs. female). We included random intercepts and by-participant and by-sentence random slopes for the critical predictor context. This model did not converge, thus we removed the by-participant random slope to achieve model convergence. Using this model, we calculated p-values with likelihood ratio tests comparing the full model against a null model (i.e. the model that does not include the critical predictor context)
+All data were analyzed with linear mixed models, using R [@R_program] and the package lme4 [@bates2015package] assuming a Gaussian error distribution. The model predicted pitch in Hz by context (formal vs. informal) and self-reported gender of participants (male vs. female). We included random intercepts and by-participant and by-sentence random slopes for the critical predictor context. This model did not converge, thus we removed the by-participant random slope to achieve model convergence. Using this model, we calculated p-values with likelihood ratio tests comparing the full model against a null model (i.e. a model that does not include the critical predictor context)
 
 The model estimated that informal contexts had 15 Hz higher pitch than formal contexts (SE = 5.7). This effect was significant at an alpha level of 0.05. Thus, assuming that the context effect is zero, the test statistics or more extreme test statistics are sufficiently improbable to reject the null hypothesis (χ2(1) = 5.45, p = 0.02). However, given that the final model does not account for by-subject variability for the critical context effect, the model has to be considered anti-conservative and the inferential conclusion has to be taken with caution.
 
