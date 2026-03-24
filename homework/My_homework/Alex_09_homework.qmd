@@ -97,7 +97,7 @@ Take the hypothesis and what you know about the data set and its structure to pr
 
 ```{r}
 
-#My prediction: The stages of evolution might be reflected in the length of pokemon name
+#My prediction: The number of stages of evolution might be reflected in the length of pokemon name
 
 ```
 
@@ -106,10 +106,14 @@ Take the hypothesis and what you know about the data set and its structure to pr
 Run the preregistered analysis made in (A) above and interpret your results relative to the hypothesis.
 
 ```{r}
-
+#let's transform NA into 0 first
+pokemon <- pokemon %>%
+  mutate(Evolution = ifelse(is.na(Evolution), 0, Evolution))
+#Now let's run a linear model to test the theory that stages of evolution is a result of length
 lm_pokemon <- lm(data = pokemon, Evolution ~ Length)
-
 summary(lm_pokemon)
+#Now the model tells us that the predicted base line for evolution stages is 0.82, with each increase in the number of letters of the name, the number of evolution stages increases by 0.06. The p value is significantly smaller than0.05 which means the null hyoothesis is not likely to to be. Whereas the r squred is extremly low, with only 0.029, that means only 2.9 percent of data points can be explained by this model, we are probably missing something.
+
 ```
 
 ## C: Show contradicting results
